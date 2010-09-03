@@ -238,7 +238,7 @@ function! Buftabs_show(deleted_buf)
 	" If the resulting list is too long to fit on the screen, chop
 	" out the appropriate part
 
-	let l:width = winwidth(0) - 12
+	let l:width = winwidth(0) - 40
 
 	if(l:start < w:from) 
 		let w:from = l:start - 1
