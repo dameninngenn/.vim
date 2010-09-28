@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: buffer_complete.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 20 Aug 2010
+" Last Modified: 16 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -39,7 +39,7 @@ function! s:source.initialize()"{{{
     " Caching events
     autocmd FileType,BufWritePost * call s:check_source()
     autocmd CursorHold * call s:rank_caching_current_cache_line(1)
-    autocmd CursorMoved,CursorHoldI * call s:rank_caching_current_cache_line(0)
+    autocmd InsertEnter,CursorHoldI * call s:rank_caching_current_cache_line(0)
     autocmd InsertLeave * call neocomplcache#sources#buffer_complete#caching_current_cache_line()
     autocmd VimLeavePre * call s:save_all_cache()
   augroup END"}}}
@@ -253,7 +253,7 @@ function! s:calc_frequency(list)"{{{
         " Garbage collect
         let l:ignorecase_save = &ignorecase
         let &ignorecase = 0
-        let l:pos = searchpos(neocomplcache#escape_match(l:word), 'ncw', 0, 300)
+        let l:pos = searchpos(neocomplcache#escape_match(l:word), 'ncw', 0)
         let &ignorecase = l:ignorecase_save
         
         if l:pos[0] == 0
@@ -520,18 +520,19 @@ function! s:check_source()"{{{
 
   " Check new buffer.
   while l:bufnumber <= bufnr('$')
-    if bufloaded(l:bufnumber)
+    if bufwinnr(l:bufnumber) >= 0
       let l:bufname = fnamemodify(bufname(l:bufnumber), ':p')
-      let l:buftype = getbufvar(l:bufnumber, '&buftype')
       if (!has_key(s:buffer_sources, l:bufnumber) || s:check_changed_buffer(l:bufnumber))
             \&& !has_key(s:disable_caching_list, l:bufnumber)
             \&& (g:neocomplcache_disable_caching_buffer_name_pattern == '' || l:bufname !~ g:neocomplcache_disable_caching_buffer_name_pattern)
-            \&& (g:neocomplcache_lock_buffer_name_pattern == '' || l:bufname !~ g:neocomplcache_lock_buffer_name_pattern)
-            \&& getfsize(l:bufname) < g:neocomplcache_caching_limit_file_size
-            \&& l:buftype !~# 'help'
-            \&& (l:buftype !~# 'nofile' || len(getbufline(l:bufnumber, 1, '$')) < 500)
-        " Caching.
-        call s:word_caching(l:bufnumber)
+            \&& !neocomplcache#is_locked(l:bufnumber)
+        if getfsize(l:bufname) < g:neocomplcache_caching_limit_file_size
+              \ && ((g:neocomplcache_force_caching_buffer_name_pattern != '' && l:bufname =~ g:neocomplcache_force_caching_buffer_name_pattern)
+              \       || (getbufvar(l:bufnumber, '&modifiable') && !getbufvar(l:bufnumber, '&readonly') && getbufvar(l:bufnumber, '&buftype') !~ 'help')
+              \)
+          " Caching.
+          call s:word_caching(l:bufnumber)
+        endif
       endif
     endif
 

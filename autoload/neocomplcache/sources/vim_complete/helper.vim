@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: helper.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 07 Aug 2010
+" Last Modified: 23 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -89,6 +89,9 @@ function! s:doc_dict.search(cur_text)"{{{
       call add(l:ret, { 'text' : s:global_candidates_list.function_prototypes[l:prototype_name] })
     elseif has_key(l:script_candidates_list.function_prototypes, l:prototype_name)
       call add(l:ret, { 'text' : l:script_candidates_list.function_prototypes[l:prototype_name] })
+    else
+      " No prototypes.
+      return []
     endif
   else
     if !has_key(s:internal_candidates_list, 'command_prototypes')
@@ -104,6 +107,9 @@ function! s:doc_dict.search(cur_text)"{{{
       call add(l:ret, { 'text' : s:internal_candidates_list.command_prototypes[l:prototype_name] })
     elseif has_key(s:global_candidates_list.command_prototypes, l:prototype_name)
       call add(l:ret, { 'text' : s:global_candidates_list.command_prototypes[l:prototype_name] })
+    else
+      " No prototypes.
+      return []
     endif
   endif
 
@@ -498,7 +504,7 @@ function! s:get_local_dictionary_variables(var_name)"{{{
 endfunction"}}}
 
 function! s:get_cached_script_candidates()"{{{
-  return has_key(s:script_candidates_list, bufnr('%')) ?
+  return has_key(s:script_candidates_list, bufnr('%')) && v:version > 700 ?
         \ s:script_candidates_list[bufnr('%')] : {
         \   'functions' : {}, 'variables' : {}, 'function_prototypes' : {}, 'dictionary_variables' : {} }
 endfunction"}}}
@@ -510,8 +516,6 @@ function! s:get_script_candidates(bufnumber)"{{{
   let l:dictionary_variable_dict = {}
   let l:function_prototypes = {}
   let l:var_pattern = '\a:[[:alnum:]_:]*\.\h\w*\%(()\?\)\?'
-
-  call neocomplcache#print_caching('Caching vim from '. bufname(a:bufnumber) .' ... please wait.')
 
   for l:line in getbufline(a:bufnumber, 1, '$')
     if l:line =~ '\<fu\%[nction]!\?\s\+s:'
@@ -538,7 +542,6 @@ function! s:get_script_candidates(bufnumber)"{{{
     endif
   endfor
 
-  call neocomplcache#print_caching('Caching done.')
   return { 'functions' : l:function_dict, 'variables' : l:variable_dict, 
         \'function_prototypes' : l:function_prototypes, 'dictionary_variables' : l:dictionary_variable_dict }
 endfunction"}}}
@@ -970,7 +973,7 @@ function! s:get_variable_type(expression)"{{{
     return '0'
   elseif a:expression =~ '^\%(\s*\.\)\?\s*["'']'
     return '""'
-  elseif a:expression =~ '\<function(\|^\s*('
+  elseif a:expression =~ '\<function('
     return '()'
   elseif a:expression =~ '^\%(\s*+\)\?\s*\['
     return '[]'

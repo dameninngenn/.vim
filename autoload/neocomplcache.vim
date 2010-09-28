@@ -1,7 +1,7 @@
 "=============================================================================
 " FILE: neocomplcache.vim
 " AUTHOR:  Shougo Matsushita <Shougo.Matsu@gmail.com>
-" Last Modified: 30 Aug 2010
+" Last Modified: 26 Sep 2010
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -476,8 +476,9 @@ endfunction"}}}
 
 function! neocomplcache#do_auto_complete(is_moved)"{{{
   if (&buftype !~ 'nofile\|nowrite' && b:changedtick == s:changedtick) || &paste
-        \|| neocomplcache#is_locked()
-        \|| (&l:completefunc != 'neocomplcache#manual_complete' && &l:completefunc != 'neocomplcache#auto_complete')
+        \ || g:neocomplcache_disable_auto_complete
+        \ || neocomplcache#is_locked()
+        \ || (&l:completefunc != 'neocomplcache#manual_complete' && &l:completefunc != 'neocomplcache#auto_complete')
     return
   endif
 
@@ -518,7 +519,7 @@ function! neocomplcache#do_auto_complete(is_moved)"{{{
 
       " Set function.
       let &l:completefunc = 'neocomplcache#auto_complete'
-      if g:neocomplcache_enable_auto_select && !neocomplcache#is_eskk_enabled()
+      if neocomplcache#is_auto_select()
         call feedkeys("\<C-x>\<C-u>\<C-p>\<Down>", 'n')
       else
         call feedkeys("\<C-x>\<C-u>", 'n')
@@ -583,7 +584,7 @@ function! neocomplcache#do_auto_complete(is_moved)"{{{
         \[l:cur_keyword_pos, l:cur_keyword_str, l:complete_words]
 
   " Start auto complete.
-  if g:neocomplcache_enable_auto_select && !neocomplcache#is_eskk_enabled()
+  if neocomplcache#is_auto_select()
     call feedkeys("\<C-x>\<C-u>\<C-p>\<Down>", 'n')
   else
     call feedkeys("\<C-x>\<C-u>\<C-p>", 'n')
@@ -921,11 +922,16 @@ endfunction"}}}
 function! neocomplcache#is_enabled()"{{{
   return s:is_enabled
 endfunction"}}}
-function! neocomplcache#is_locked()"{{{
+function! neocomplcache#is_locked(...)"{{{
+  let l:bufnr = a:0 > 0 ? a:1 : bufnr('%')
   return !s:is_enabled 
-        \ || (has_key(s:complete_lock, bufnr('%')) && s:complete_lock[bufnr('%')])
-        \ || g:neocomplcache_disable_auto_complete
-        \ || (g:neocomplcache_lock_buffer_name_pattern != '' && bufname('%') =~ g:neocomplcache_lock_buffer_name_pattern)
+        \ || (has_key(s:complete_lock, l:bufnr) && s:complete_lock[l:bufnr])
+        \ || (g:neocomplcache_lock_buffer_name_pattern != '' && bufname(l:bufnr) =~ g:neocomplcache_lock_buffer_name_pattern)
+endfunction"}}}
+function! neocomplcache#is_auto_select()"{{{
+  return g:neocomplcache_enable_auto_select && !neocomplcache#is_eskk_enabled()
+        \ && (g:neocomplcache_disable_auto_select_buffer_name_pattern == ''
+        \     || bufname('%') !~ g:neocomplcache_disable_auto_select_buffer_name_pattern)
 endfunction"}}}
 function! neocomplcache#is_auto_complete()"{{{
   return &l:completefunc == 'neocomplcache#auto_complete'
@@ -946,8 +952,10 @@ function! neocomplcache#within_comment()"{{{
   return s:within_comment
 endfunction"}}}
 function! neocomplcache#print_caching(string)"{{{
-  redraw
-  echon a:string
+  if g:neocomplcache_enable_caching_message
+    redraw
+    echon a:string
+  endif
 endfunction"}}}
 function! neocomplcache#print_error(string)"{{{
   echohl Error | echomsg a:string | echohl None
@@ -1199,13 +1207,13 @@ function! s:display_neco(number)"{{{
     \],
   \]
 
-  let l:num = a:number == '' ? neocomplcache#rand(len(l:animation) - 1) : a:number
-  let &cmdheight = len(l:animation[l:num][0])
+  let l:anim = get(l:animation, a:number, l:animation[neocomplcache#rand(len(l:animation) - 1)])
+  let &cmdheight = len(l:anim[0])
 
-  for l:anim in l:animation[l:num]
-    echo join(repeat([''], &cmdheight-1), "\n")
+  for l:frame in l:anim
+    echo repeat("\n", &cmdheight-2)
     redraw
-    echon join(l:anim, "\n")
+    echon join(l:frame, "\n")
     sleep 300m
   endfor
   redraw
@@ -1489,7 +1497,7 @@ function! s:integrate_completion(complete_result, is_sort)"{{{
   if !neocomplcache#is_eskk_enabled() && a:is_sort
     call sort(l:complete_words, 'neocomplcache#compare_rank')
   endif
-  let l:complete_words = filter(l:complete_words[: g:neocomplcache_max_list], 'v:val.word !=# '.string(l:cur_keyword_str))
+  let l:complete_words = l:complete_words[: g:neocomplcache_max_list]
   
   let l:icase = g:neocomplcache_enable_ignore_case && 
         \!(g:neocomplcache_enable_smart_case && l:cur_keyword_str =~ '\u')
@@ -1512,12 +1520,17 @@ function! s:integrate_completion(complete_result, is_sort)"{{{
         let l:delim_cnt += 1
       endwhile
 
+      let l:delimiter_dup = {}
       for l:keyword in l:complete_words
         let l:split_list = split(l:keyword.word, l:delimiter)
         if len(l:split_list) > 1
           let l:delimiter_sub = substitute(l:delimiter, '\\\([.^$]\)', '\1', 'g')
           let l:keyword.word = join(l:split_list[ : l:delim_cnt], l:delimiter_sub)
           let l:keyword.abbr = join(split(l:keyword.abbr, l:delimiter)[ : l:delim_cnt], l:delimiter_sub)
+          if !has_key(l:delimiter_dup, l:keyword.word)
+            let l:keyword.dup = 1
+            let l:delimiter_dup[l:keyword.word] = 1
+          endif
 
           if len(l:keyword.abbr) > g:neocomplcache_max_keyword_width
             let l:keyword.abbr = substitute(l:keyword.abbr, '\(\h\)\w*'.l:delimiter, '\1'.l:delimiter_sub, 'g')
