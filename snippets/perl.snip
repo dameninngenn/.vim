@@ -49,3 +49,24 @@ snippet cmp_deeply
 snippet print
 	print "${1:any}","\n";
 
+snippet package
+	package ${1:PackageName};
+	
+	use strict;
+	use warnings;
+	use Dumpvalue;
+	
+	
+	
+	1;
+
+snippet new
+	sub new {
+		my $class = shift;
+		my $self = {
+		};
+		
+		bless $self,$class;
+		return $self;
+	}
+
