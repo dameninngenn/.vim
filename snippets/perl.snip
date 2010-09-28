@@ -1,0 +1,51 @@
+snippet BEGIN
+	BEGIN {
+		${1:# any};
+	}
+
+snippet use_ok
+	use_ok('${1:PackageName}');
+
+snippet can_ok
+	can_ok('${1:PackageName}','${2:method_name}');
+
+snippet isa_ok
+	can_ok(${1:$Instance},'${2:PackageName}');
+
+snippet ok
+	ok(
+		${1:$var},
+		'${2:test comment}'
+	);
+
+snippet is
+	is(
+		${1:$var},
+		${2:$var},
+		'${3:test comment}'
+	);
+
+snippet isnt
+	isnt(
+		${1:$var},
+		${2:$var},
+		'${3:test comment}'
+	);
+
+snippet like
+	like(
+		${1:$var},
+		qr/${2:regexp}/,
+		'${3:test comment}'
+	);
+
+snippet cmp_deeply
+	cmp_deeply(
+		${1:$ref},
+		${2:cmp},
+		'${3:test comment}'
+	);
+
+snippet print
+	print "${1:any}","\n";
+
