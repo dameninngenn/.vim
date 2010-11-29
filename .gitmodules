@@ -16,3 +16,6 @@
 [submodule "bundle/xmledit"]
 	path = bundle/xmledit
 	url = git://github.com/sukima/xmledit.git
+[submodule "bundle/vim-unite"]
+	path = bundle/vim-unite
+	url = git://github.com/Shougo/unite.vim.git
