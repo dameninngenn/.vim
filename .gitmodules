@@ -4,8 +4,8 @@
 [submodule "bundle/vim-quickrun"]
 	path = bundle/vim-quickrun
 	url = git://github.com/thinca/vim-quickrun.git
-[submodule "bundle/YankRingSync"]
-	path = bundle/YankRingSync
+[submodule "bundle/yankringsync"]
+	path = bundle/yankringsync
 	url = git://github.com/m4i/YankRingSync.git
 [submodule "bundle/neocomplcache"]
 	path = bundle/neocomplcache
