@@ -13,3 +13,6 @@
 [submodule "bundle/perldoc-vim"]
 	path = bundle/perldoc-vim
 	url = git://github.com/hotchpotch/perldoc-vim.git
+[submodule "bundle/xmledit"]
+	path = bundle/xmledit
+	url = git://github.com/sukima/xmledit.git
