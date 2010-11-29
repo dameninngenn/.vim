@@ -1,0 +1,1 @@
+/home/dameninngenn/.vim/bundle/xmledit/ftplugin/xml.vim
