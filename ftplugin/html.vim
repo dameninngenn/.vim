@@ -1,1 +1,1 @@
-/home/dameninngenn/.vim/bundle/xmledit/ftplugin/xml.vim
+../bundle/xmledit/ftplugin/xml.vim
