@@ -22,3 +22,6 @@
 [submodule "bundle/vim-uwaa"]
 	path = bundle/vim-uwaa
 	url = git@github.com:dameninngenn/vim-uwaa.git
+[submodule "bundle/unite-script"]
+	path = bundle/unite-script
+	url = git://github.com/hakobe/unite-script.git
