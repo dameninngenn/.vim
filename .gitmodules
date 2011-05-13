@@ -25,3 +25,9 @@
 [submodule "bundle/unite-script"]
 	path = bundle/unite-script
 	url = git://github.com/hakobe/unite-script.git
+[submodule "bundle/googletasks-vim"]
+	path = bundle/googletasks-vim
+	url = git://github.com/mattn/googletasks-vim.git
+[submodule "bundle/webapi-vim"]
+	path = bundle/webapi-vim
+	url = git://github.com/mattn/webapi-vim.git
