@@ -70,3 +70,6 @@ snippet new
 		return $self;
 	}
 
+snippet open
+    open my $fh,'${1:<}',${2:$filename} or die '${3:message}';
+
