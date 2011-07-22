@@ -73,3 +73,13 @@ snippet new
 snippet open
     open my $fh,'${1:<}',${2:$filename} or die '${3:message}';
 
+snippet Furl
+	Furl->new(
+		agent => '${1:UA}',
+	);
+	
+	my $res = $furl->request(
+		method => '${2:GET}',
+		url => '${3:url}',
+	);
+
