@@ -78,8 +78,8 @@ snippet Furl
 		agent => '${1:UA}',
 	);
 	
-	my $res = $furl->request(
-		method => '${2:GET}',
-		url => '${3:url}',
+	my $res = $${2:furl}->request(
+		method => '${3:GET}',
+		url => '${4:url}',
 	);
 
