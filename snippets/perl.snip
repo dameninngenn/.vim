@@ -39,6 +39,13 @@ snippet like
 		'${3:test comment}'
 	);
 
+snippet unlike
+	unlike(
+		${1:$var},
+		qr/${2:regexp}/,
+		'${3:test comment}'
+	);
+
 snippet cmp_deeply
 	cmp_deeply(
 		${1:$ref},
@@ -72,14 +79,4 @@ snippet new
 
 snippet open
     open my $fh,'${1:<}',${2:$filename} or die '${3:message}';
-
-snippet Furl
-	Furl->new(
-		agent => '${1:UA}',
-	);
-	
-	my $res = $${2:furl}->request(
-		method => '${3:GET}',
-		url => '${4:url}',
-	);
 
