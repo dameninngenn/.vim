@@ -37,3 +37,6 @@
 [submodule "phrase/dameninngenn"]
 	path = phrase/dameninngenn
 	url = git://github.com/dameninngenn/phrase-dameninngenn.git
+[submodule "bundle/vim-hahhah"]
+	path = bundle/vim-hahhah
+	url = git://github.com/mattn/hahhah-vim.git
