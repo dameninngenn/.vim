@@ -40,3 +40,6 @@
 [submodule "bundle/vim-hahhah"]
 	path = bundle/vim-hahhah
 	url = git://github.com/mattn/hahhah-vim.git
+[submodule "bundle/gist-vim"]
+	path = bundle/gist-vim
+	url = git://github.com/mattn/gist-vim.git
