@@ -43,3 +43,6 @@
 [submodule "bundle/gist-vim"]
 	path = bundle/gist-vim
 	url = git://github.com/mattn/gist-vim.git
+[submodule "bundle/vim-emacscommandline"]
+	path = bundle/vim-emacscommandline
+	url = git://github.com/houtsnip/vim-emacscommandline.git
