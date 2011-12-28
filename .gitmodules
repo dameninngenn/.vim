@@ -52,3 +52,6 @@
 [submodule "bundle/vim-visualstar"]
 	path = bundle/vim-visualstar
 	url = git://github.com/thinca/vim-visualstar.git
+[submodule "bundle/vim-speeddating"]
+	path = bundle/vim-speeddating
+	url = git://github.com/tpope/vim-speeddating.git
