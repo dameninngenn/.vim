@@ -58,3 +58,6 @@
 [submodule "bundle/unite-script"]
 	path = bundle/unite-script
 	url = git://github.com/ikeji/unite-script.git
+[submodule "unite-scripts"]
+	path = unite-scripts
+	url = git@github.com:dameninngenn/unite-scripts.git
