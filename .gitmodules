@@ -61,3 +61,6 @@
 [submodule "unite-scripts"]
 	path = unite-scripts
 	url = git@github.com:dameninngenn/unite-scripts.git
+[submodule "unite-sources"]
+	path = unite-sources
+	url = git@github.com:dameninngenn/unite-sources.git
