@@ -66,11 +66,9 @@ snippet package
 snippet new
 	sub new {
 		my $class = shift;
-		my $self = {
-		};
+		my $args = ref $_[0] ? $_[0] : +{@_};
 		
-		bless $self,$class;
-		return $self;
+		bless $args, $class;
 	}
 
 snippet open
