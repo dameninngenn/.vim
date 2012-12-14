@@ -80,3 +80,5 @@ snippet slurp
 	open my $fh, '<:encoding(UTF-8)', ${1:$filename} or die "$!";
 	do { local $/; <$fh> };
 
+snippet dumper
+	use Data::Dumper;warn Dumper ${1:$val};
