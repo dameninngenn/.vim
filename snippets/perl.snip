@@ -74,5 +74,9 @@ snippet new
 	}
 
 snippet open
-    open my $fh,'${1:<}',${2:$filename} or die '${3:message}';
+    open my $fh,'${1:<}',${2:$filename} or die "$!";
+
+snippet slurp
+	open my $fh, '<:encoding(UTF-8)', ${1:$filename} or die "$!";
+	do { local $/; <$fh> };
 
