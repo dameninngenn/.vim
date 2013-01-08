@@ -21,7 +21,7 @@
 	url = git://github.com/Shougo/unite.vim.git
 [submodule "bundle/vim-uwaa"]
 	path = bundle/vim-uwaa
-	url = git@github.com:dameninngenn/vim-uwaa.git
+	url = git://github.com/dameninngenn/vim-uwaa.git
 [submodule "bundle/googletasks-vim"]
 	path = bundle/googletasks-vim
 	url = git://github.com/mattn/googletasks-vim.git
@@ -60,10 +60,10 @@
 	url = git://github.com/ikeji/unite-script.git
 [submodule "unite-scripts"]
 	path = unite-scripts
-	url = git@github.com:dameninngenn/unite-scripts.git
+	url = git://github.com/dameninngenn/unite-scripts.git
 [submodule "unite-sources"]
 	path = unite-sources
-	url = git@github.com:dameninngenn/unite-sources.git
+	url = git://github.com/dameninngenn/unite-sources.git
 [submodule "bundle/w3m-vim"]
 	path = bundle/w3m-vim
 	url = git://github.com/yuratomo/w3m.vim.git
