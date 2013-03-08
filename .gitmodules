@@ -4,3 +4,6 @@
 [submodule "unite-sources"]
     path = unite-sources
     url = git://github.com/dameninngenn/unite-sources.git
+[submodule "phrase/dameninngenn"]
+    path = phrase/dameninngenn
+    url = git://github.com/dameninngenn/phrase-dameninngenn.git
